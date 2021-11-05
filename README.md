@@ -63,7 +63,7 @@ Let's create a new database called `practice`. Run this command: `use practice`.
 
 If we now run the command `show collections` we can see that there are currently no collections on our database. On this assignment repo, you will find a file called `restaurants.json` which is a collection of restaurant data. Let's load this collection into our database. Open a new terminal window and run this command:
 ```
-mongoimport --db practice --collection restaurants --drop --file /Users/shrreya/Desktop/Projects/ReCoded/curriculum-backend-mongodb-queries-practice/restaurants.json
+mongoimport --db practice --collection restaurants --drop --file /Path/to/your/file/restaurants.json
 ```
 The output should mention:
 ```
