@@ -7,119 +7,57 @@ The objectives of this assignment are:
 
 ## Setup
 
-Unlike the SQL assignment, this time we'll be working with a local database. So we will need to complete the local setup before we begin.
+### Prepare Local Database using Docker
 
-### Install MongoDB
+With Docker, setting up your local database becomes straightforward and ensures a consistent environment across different setups. Follow these steps to prepare your local MongoDB database:
 
-Let's start by installing MongoDB on our local environments. Follow [these instructions on the MongoDB documentation](https://docs.mongodb.com/manual/installation/) to download and install MongoDB as per your OS.
+1. **Start MongoDB Container**: First, start the MongoDB container by running:
 
-You can also [follow these instructions from the Microsoft documentation](https://docs.microsoft.com/en-us/windows/wsl/tutorials/wsl-database) if you are using WSL on your machine.
+   ```
+   docker-compose up -d
+   ```
 
-**NOTE** : Make sure to install the _Community Edition of MongoDB_ and check that the version being installed is MongoDB 5.0, which is the latest release.
+2. **Verify Container Running**: To ensure that the MongoDB container is running correctly and to check your container name, use the following command:
 
-### Verify your installation
+   ```
+   docker ps
+   ```
 
-After following the installation instructions, run the following command:
+3. **Copy Restaurant Data to Container**: Now, copy the `restaurants.json` data file to your running MongoDB container. Replace `<path to your restaurant.json file>` with the actual path to your `restaurants.json` file, and `your_container_name` with the name of your MongoDB container:
 
-```
-mongod --version
-```
+   ```
+   docker cp <path to your restaurant.json file> your_container_name:/home/mongodb
+   ```
 
-You should see an output similar to this:
+4. **Import Data into MongoDB**: Import the restaurant data into the MongoDB database by executing:
 
-```
-db version v5.0.3
-Build Info: {
-    "version": "5.0.3",
-    "gitVersion": "657fea5a61a74d7a79df7aff8e4bcf0bc742b748",
-    "modules": [],
-    "allocator": "system",
-    "environment": {
-        "distarch": "x86_64",
-        "target_arch": "x86_64"
-    }
-}
-```
+   ```
+   docker exec -i your_container_name mongoimport --db practice --collection restaurants --drop --file /home/mongodb/restaurants.json --authenticationDatabase admin --username root --password example
+   ```
 
-This confirms that we have installed MongoDB version 5.0.
+5. **Access MongoDB Shell**: To interact with your MongoDB instance, access the shell using:
 
-### Run MongoDB
+   ```
+   docker exec -it your_container_name mongosh -u root -p example
+   ```
 
-For Linux, run the command to start running the MongoDB service:
+6. **Switch to Practice Database**: Inside the MongoDB shell, switch to the `practice` database:
 
-```
-sudo systemctl start mongod
-```
+   ```
+   use practice
+   ```
 
-Verify that MongoDB has started successfully by running the command:
+7. **Verify Data Import**: Confirm that the data import was successful by fetching the first document from the `restaurants` collection:
 
-```
-sudo systemctl status mongod
-```
+   ```
+   db.restaurants.findOne()
+   ```
 
-For MacOS, run the command to start running the MongoDB service:
+   If you see the details of the first restaurant, your setup is complete and successful.
 
-```
-brew services start mongodb-community@5.0
-```
+8. **Exit MongoDB Shell**: To exit the Mongo shell, simply type `exit`.
 
-Verify that MongoDB has started successfully by running the command:
-
-```
-brew services list
-```
-
-### Prepare local database
-
-To begin using MongoDB, connect the Mongo shell to the running instance simply by running the command: `mongosh`
-It should show connection information and open a prompt looking like: `test>`
-
-By default the local MongoDB setup includes a database called `test`. You can verify this now by running the command `db` and it should print the name of the current database which is `test`.
-
-Let's create a new database called `practice`. Run this command: `use practice`. You should get an output `switched to db practice` and the prompt should change to `practice>`. This means we are now ready to use our new database.
-
-If we now run the command `show collections` we can see that there are currently no collections on our database. On this assignment repo, you will find a file called `restaurants.json` which is a collection of restaurant data. Let's load this collection into our database. Open a new terminal window and run this command:
-
-```
-mongoimport --db practice --collection restaurants --drop --file /Path/to/your/file/restaurants.json
-```
-
-The output should mention:
-
-```
-3772 document(s) imported successfully
-```
-
-Now if we return to the terminal window running Mongo shell and run `show collections` again we will see that our database now has a collection called `restaurants`.
-
-Let's run a query to look at the first document in the collection:
-
-```
-db.restaurants.findOne()
-```
-
-If you see all the details of the first restaurant, you have completed the setup successfully!
-
-Looking at this first document, you should be able to understand the document model.
-
-```
-{
-  _id: ObjectId,
-  address: Object {
-    building: String,
-    coord: Array of numbers,
-    street: String,
-    zipcode: String
-  },
-  borough: String,
-  cuisine: String,
-  grades: Array of objects {date: Date, grade: String, score: Number},
-  name: String,
-  restaurant_id: String
-}
-```
-
-If you want to exit the Mongo shell, you can just type the command: `exit`
+Now your MongoDB environment is set up inside a Docker container, and you're ready to start querying your local `practice` database.
 
 ## Practice Time
 
@@ -142,19 +80,3 @@ After your changes are pushed, return to this assignment on Canvas for the final
 ## Conclusion
 
 Now that we have practiced performing queries on a MongoDB database, we are ready for module 3 where we will learn to build a CRUD API using Express.js and a MongoDB ODM.
-
-```
-docker-compose up -d
-
-docker ps
-
-docker cp <path to your resturant.json file> your_container_name:/home/mongodb
-
-docker exec -i curriculum-backend-mongodb-queries-practice-mongodb-1 mongoimport --db practice --collection restaurants --drop --file /home/mongodb --authenticationDatabase admin --username root --password example
-
-docker exec -it curriculum-backend-mongodb-queries-practice-mongodb-1 mongosh -u root -p example
-
-use practice
-
-db.restaurants.findOne()
-```
