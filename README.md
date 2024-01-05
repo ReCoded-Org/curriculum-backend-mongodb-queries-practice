@@ -59,6 +59,10 @@ With Docker, setting up your local database becomes straightforward and ensures 
 
 Now your MongoDB environment is set up inside a Docker container, and you're ready to start querying your local `practice` database.
 
+9. **Delete volume and reset**: if things got missy and you want to start from scratch, you can use the follwing command and restart from step 1
+
+`npm run reset`
+
 ## Practice Time
 
 Let's perform some queries on our restaurants collection now. In this assignment repo, you will find another markdown file called `QUERIES.md`. In this file, we have listed many practice queries for you. Go through the questions one by one and try to execute the queries on your Mongo shell.
