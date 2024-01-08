@@ -14,31 +14,31 @@ With Docker, setting up your local database becomes straightforward and ensures 
 1. **Start MongoDB Container**: First, start the MongoDB container by running:
 
    ```
-   docker-compose up -d
+   npm run start
    ```
 
 2. **Verify Container Running**: To ensure that the MongoDB container is running correctly and to check your container name, use the following command:
 
    ```
-   docker ps
+   npm run verify
    ```
 
 3. **Copy Restaurant Data to Container**: Now, copy the `restaurants.json` data file to your running MongoDB container. Replace `<path to your restaurant.json file>` with the actual path to your `restaurants.json` file, and `your_container_name` with the name of your MongoDB container:
 
    ```
-   docker cp <path to your restaurant.json file> your_container_name:/home/mongodb
+   npm run copy-data
    ```
 
 4. **Import Data into MongoDB**: Import the restaurant data into the MongoDB database by executing:
 
    ```
-   docker exec -i your_container_name mongoimport --db practice --collection restaurants --drop --file /home/mongodb/restaurants.json --authenticationDatabase admin --username root --password example
+   npm run import-data
    ```
 
 5. **Access MongoDB Shell**: To interact with your MongoDB instance, access the shell using:
 
    ```
-   docker exec -it your_container_name mongosh -u root -p example
+   npm run shell
    ```
 
 6. **Switch to Practice Database**: Inside the MongoDB shell, switch to the `practice` database:
@@ -58,6 +58,10 @@ With Docker, setting up your local database becomes straightforward and ensures 
 8. **Exit MongoDB Shell**: To exit the Mongo shell, simply type `exit`.
 
 Now your MongoDB environment is set up inside a Docker container, and you're ready to start querying your local `practice` database.
+
+9. **Delete volume and reset**: if things got missy and you want to start from scratch, you can use the follwing command and restart from step 1
+
+`npm run reset`
 
 ## Practice Time
 
