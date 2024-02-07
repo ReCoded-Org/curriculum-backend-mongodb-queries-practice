@@ -47,25 +47,25 @@ db.restaurants.find({grades: { $elemMatch: {"score": {$gt: 90}}}})
 db.restaurants.find({grades: { $elemMatch: {"score": {$gt: 80, $lt: 100}}}})
 ```
 
-10. Find the restaurants which are located in latitude value less than -95.754168.
+10. Find the restaurants which are located in longitude value less than -95.754168. Note: the first index of 'coord' is the longitude. 
 ```
-db.restaurants.find({"address.coord": {$lt: -95.754168}})
+db.restaurants.find({"address.coord.0": {$lt: -95.754168}})
 ```
 
-11. Find the restaurants that do not prepare any cuisine of 'American' and their grade score is more than 70 and latitude less than -65.754168.
+11. Find the restaurants that do not prepare any cuisine of 'American ' and their grade score is more than 70 and longitude less than -65.754168.
 ```
 db.restaurants.find(
     {
         $and: [
             {"cuisine": {$ne: "American "}},
             {"grades.score": {$gt: 70}},
-            {"address.coord": {$lt: -65.754168}}
+            {"address.coord.0": {$lt: -65.754168}}
         ]
     }
 )
 ```
 
-12. Find the restaurants which do not prepare any cuisine of 'American' and achieved a score more than 70 and are located in the longitude less than -65.754168.
+12. Find the restaurants which do not prepare any cuisine of 'American ' and achieved a score more than 70 and are located in the longitude less than -65.754168.
 
 Note : Do this query without using $and operator. 
 ```
@@ -73,12 +73,12 @@ db.restaurants.find(
     {
         "cuisine": {$ne: "American "},
         "grades.score": {$gt: 70},
-        "address.coord": {$lt: -65.754168}
+        "address.coord.0": {$lt: -65.754168}
     }
 )
 ```
 
-13. Find the restaurants which do not prepare any cuisine of 'American' and achieved a grade point 'A' and does not belong to the borough Brooklyn. The document must be displayed according to the cuisine in descending order.
+13. Find the restaurants which do not prepare any cuisine of 'American ' and achieved a grade point 'A' and does not belong to the borough Brooklyn. The document must be displayed according to the cuisine in descending order.
 ```
 db.restaurants.find(
     {
@@ -132,7 +132,7 @@ db.restaurants.find(
     { 
         "borough": "Bronx" , 
         $or : [
-            { "cuisine" : "American" },
+            { "cuisine" : "American " },
             { "cuisine" : "Chinese" }
         ]
     } 
@@ -241,7 +241,7 @@ db.restaurants.find(
 ```
 db.restaurants.find( 
     { 
-        "address.coord.1": { gt: 42, $lte: 52 }
+        "address.coord.1": { $gt: 42, $lte: 52 }
     },
     {
         "restaurant_id": 1,
@@ -288,7 +288,7 @@ db.restaurants.find(
 31. Find the restaurant name, borough, longitude and latitude and cuisine for those restaurants which contain 'mon' as three letters somewhere in its name.
 ```
 db.restaurants.find(
-    { name: { $regex : /^Mad/i } },
+    { name: { $regex : /mon/i } },
     {
         "name": 1,
         "borough": 1,
